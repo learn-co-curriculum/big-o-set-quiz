@@ -1,6 +1,6 @@
-# Day 4: Big O Queue Quiz
+# Day 5: Big O Set Quiz
 
-In this quiz we'll ask you to calculate the time complexity for several of the Queue class methods. Remember that we used an Array as the underlying data structure for our class. If you don't know the time complexity for an Array method, you may need to Google.
+In this quiz we'll ask you to calculate the time complexity for several of the MySet class methods. Remember that we used a Hash/Object as the underlying data structure for our class. If you don't know the time complexity for a method, you may need to Google.
 
 1. Mult choice
 
@@ -9,8 +9,20 @@ Calculate the time complexity for the following method:
 <h3>JavaScript</h3>
 <pre>
 <code>
-dequeue() {
-  return this.queue.shift();
+constructor(iterable) {
+  if (!(iterable === undefined || 
+    Array.isArray(iterable) || 
+    typeof iterable === 'string')) {
+      throw new Error('MySet only accepts iterables or nothing on initialization!');
+  }
+
+  this.data = {};
+
+  if (iterable) {
+    for (const el of iterable) {
+      this.data[el] = true;
+    }
+  }
 }
 </code>
 </pre>
@@ -18,16 +30,25 @@ dequeue() {
 <h3>Ruby</h3>
 <pre>
 <code>
-def dequeue
-  @queue.shift
+def initialize(iterable = nil)
+  raise 'MySet only accepts iterables or nothing on initialization!' unless 
+    iterable.nil? || iterable.kind_of?(Array) || iterable.kind_of?(String)
+
+  @data = {}
+
+  unless iterable.nil?
+    items = iterable.kind_of?(String) ? iterable.split('') : iterable
+
+    items.each { |el| @data[el] = true }
+  end
 end
 </code>
 </pre>
 
 - O(n): Linear time
-  - Correct! We're guessing you Googled this one or had a little knowledge nugget already tucked away in your brain. Removing an element from the front of the queue takes linear time because the Array must be re-indexed after the 0th element is removed.
+  - Correct! The worst case is if an Array or String is provided as an argument. In that case, we iterate over the input and add each item to <code>data</code>, which is a linear-time operation.
 - O(1): Constant time
-  - Not quite. We suggest Googling the time complexity of calling shift on an Array. As it turns out, it's not quite as simple as just removing the element. Other work also occurs.
+  - Not quite. This would be true if the Array or String were always the same length, but an Array or String of any length could be provided.
 - I don't know
   - With time and practice, it'll start to sink in. Keep studying and you'll get there.
 
@@ -38,8 +59,9 @@ Calculate the time complexity for the following method:
 <h3>JavaScript</h3>
 <pre>
 <code>
-search(target) {
-  return this.queue.indexOf(target);
+add(item) {
+  this.data[item] = true;
+  return this;
 }
 </code>
 </pre>
@@ -47,18 +69,19 @@ search(target) {
 <h3>Ruby</h3>
 <pre>
 <code>
-def search(target)
-  @queue.index(target) || -1
+def add(item)
+  @data[item] = true
+  self
 end
 </code>
 </pre>
 
-- O(n): Linear time
-  - Correct! In the worst case, we'll have to traverse the whole queue, so the runtime is directly proportional to the number of items in the queue.
 - O(1): Constant time
-  - Not quite. What if the queue has many items and the target isn't in it? How will that affect the runtime?
-- O(log n): Logarithmic time
-  - Not quite. Keep in mind that for logarithmic time operations, the input gets divided as it's operated upon. Notice that the method iterates through the items in the queue one by one.
+  - Perfect! Accessing a value by key in a Hash/Object takes constant time, so does returning the instance.
+- O(2): Constant time
+  - Not quite. Remember that we have to simplify our notation, so constant time is always expressed as O(1), even if we perform many constant-time operations.
+- O(n): Linear time
+  - Not quite. You may wish to look up Big O for accessing values by key in a Hash.
 - I don't know
   - With time and practice, it'll start to sink in. Keep studying and you'll get there.
 
@@ -69,8 +92,8 @@ Calculate the time complexity for the following method:
 <h3>JavaScript</h3>
 <pre>
 <code>
-size() {
-  return this.queue.length;
+has(item) {
+  return !!this.data[item];
 }
 </code>
 </pre>
@@ -78,15 +101,15 @@ size() {
 <h3>Ruby</h3>
 <pre>
 <code>
-def size
-  @queue.length
+def has(item)
+  !!@data[item]
 end
 </code>
 </pre>
 
 - O(1): Constant time
-  - Yes! Getting the size of the queue takes constant time because it calls <code>length</code> upon the underlying array. 
+  - Yes! Accessing a value by key takes constant time. 
 - O(n): Linear time
-  - Not quite. What is Big O for getting the length of an Array or accessing an attribute on an object? 
+  - Not quite. What is Big O for accessing a value by key in a Hash or Object? 
 - I don't know
   - With time and practice, it'll start to sink in. Keep studying and you'll get there.
